@@ -1,0 +1,2 @@
+rootProject.name='kuttypy'
+include ':app', ':androidplot-core', ':usbSerialForAndroid', ':usbserial', ':gauge'

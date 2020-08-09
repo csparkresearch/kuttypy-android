@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_io"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_io" />
+        <item
+            android:id="@+id/nav_adc"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_adc" />
+
+        <item
+            android:id="@+id/nav_mpu6050"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_mpu6050" />
+
+        <item
+            android:id="@+id/nav_bmp280"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_bmp280" />
+
+    </group>
+
+
+
+</menu>

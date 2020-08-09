@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_io">
+
+    <fragment
+        android:id="@+id/nav_io"
+        android:name="com.example.kuttypy.ui.gallery.GalleryFragment"
+        android:label="@string/menu_io"
+        tools:layout="@layout/fragment_gallery">
+        <action
+            android:id="@+id/action_nav_spectrum_to_nav_controls2"
+            app:destination="@id/nav_adc" />
+        <action
+            android:id="@+id/action_nav_io_to_nav_mpu60502"
+            app:destination="@id/nav_mpu6050" />
+        <action
+            android:id="@+id/action_nav_io_to_nav_BMP280"
+            app:destination="@id/nav_bmp280" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_adc"
+        android:name="com.example.kuttypy.ui.home.HomeFragment"
+        android:label="@string/menu_adc"
+        tools:layout="@layout/fragment_home"></fragment>
+
+
+    <fragment
+        android:id="@+id/nav_mpu6050"
+        android:name="com.example.kuttypy.SensorFragment"
+        android:label="@string/menu_mpu6050"
+        tools:layout="@layout/fragment_sensor" >
+
+        <argument
+            android:name="device"
+            app:argType="string"
+            android:defaultValue="MPU6050"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_bmp280"
+        android:name="com.example.kuttypy.SensorFragment"
+        android:label="@string/menu_bmp280"
+        tools:layout="@layout/fragment_sensor" >
+
+        <argument
+            android:name="device"
+            app:argType="string"
+            android:defaultValue="BMP280"/>
+
+    </fragment>
+
+
+
+    `
+
+</navigation>

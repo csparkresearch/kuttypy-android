@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">KuttyPy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">KuttyPy</string>
+    <string name="nav_header_subtitle">csparkresearch@gmail.com</string>
+    <string name="nav_header_desc">Connect with the real world</string>
+    <string name="action_credits">About</string>
+    <string name="action_reconnect">Reconnect</string>
+
+    <string name="menu_adc">10 Bit ADC</string>
+    <string name="menu_io">All I/O Pins</string>
+    <string name="menu_save">Save Data</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="online_resources">Online Resources</string>
+    <string name="myTitle">Counts</string>
+    <string name="menu_i2c">I2C Sensors</string>
+    <string name="menu_mpu6050">I2C MPU6050</string>
+    <string name="menu_bmp280">BMP280 Pressure Sensor</string>
+</resources>
