@@ -12,7 +12,9 @@ import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.os.Process;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     private BMP280 bmp280;
     public String dev = new String("IO");
     private boolean initSensor=false;
+    private String command = new String("");
+    private Handler messageHandler;
 
     public MainActivity() {
     }
@@ -142,9 +146,15 @@ public class MainActivity extends AppCompatActivity {
         model.getSensor().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String name) {
-
                 dev = name;
                 initSensor = true;
+            }
+        });
+
+        model.getCommand().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String name) {
+                command = String.valueOf(name);
             }
         });
 
@@ -192,11 +202,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        messageHandler = new Handler() {
+
+            @Override public void handleMessage(Message msg) {
+                String mString=(String)msg.obj;
+                Toast.makeText(getBaseContext(), mString, Toast.LENGTH_LONG).show();
+            }
+            
+        };
+
         HandlerThread thread = new HandlerThread("MyHandlerThread", Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
         thread.start();
         mHandler = new Handler(thread.getLooper());
-
         //eventLoop.run();
         mHandler.postDelayed(eventLoop, 10);
     }
@@ -316,15 +334,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                     initSensor=false;
                 }
-
+                // Pending register writes
                 for (int i=0; i<writeThese.size(); i++) {
                     List<Integer> w = writeThese.get(i);
                     if(w.size() == 2) { // probably a setReg
-                        Toast.makeText(getBaseContext(), w.get(0) + " set to " + w.get(1), Toast.LENGTH_SHORT).show();
                         MCA.writeReg((int) w.get(0), (int) w.get(1));
                     }
                 }
                 writeThese.clear();
+
+                // Pending Commands
+                if(command.equals("scan")){
+                    Log.e("ERR","SCANNING");
+                    List found = MCA.scanI2C();
+                    Log.e("ERR","SCANNING"+found.toString());
+                    Message msg = new Message();
+                    msg.obj = " Devices at: " + found.toString();
+                    messageHandler.sendMessage(msg);
+                    command = "" ;
+                }
+
                 if(dev.equals("IO")){ //(navController.getCurrentDestination().getId() == R.id.nav_io){
                     List<Integer> arr = new ArrayList<Integer>(4);
                     arr.add(MCA.readReg(0x39)); //PINA
@@ -348,7 +377,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (MCA.connected == false || (MCA.commandStatus != MCA.SUCCESS)) {
-                    Toast.makeText(getBaseContext(), "Device disconnected.  Check connections.", Toast.LENGTH_SHORT).show();
+                    Message msg = new Message() ;
+                    msg.obj = "Device disconnected.  Check connections and reconnect";
+                    messageHandler.sendMessage(msg);
                     continue;
                 }
             }

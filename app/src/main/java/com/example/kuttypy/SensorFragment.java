@@ -50,8 +50,15 @@ public class SensorFragment extends Fragment {
 
         scan = (Button) root.findViewById(R.id.scanButton);
         smooth = (CheckBox) root.findViewById(R.id.smoothBox);
-
         data = new ViewModelProvider(requireActivity()).get(spectrumData.class);
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.setCommand("scan");
+            }
+        });
+
 
         if(getArguments() != null) {
 

@@ -217,10 +217,11 @@ public class comlib {
 		int got=0,bt = 0,timeouts=0;
 		if (systemBusy()) return arr;
 		try {
-			port.write(new byte[] { (byte)(READI2C&0xFF),addr,reg, (byte) numbytes}, 0);
-			SystemClock.sleep(1);
+			port.write(new byte[] { (byte)(READI2C&0xFF),addr,reg, (byte) numbytes}, 5);
+			SystemClock.sleep(5);
 			do{
 				bt = port.read(buffer,1);
+
 				if (bt==0)timeouts++;
 				if(timeouts>5)break;
 				for(int i=0;i<bt;i++,got++)arr.add((int) buffer[i]&0xFF);
@@ -279,7 +280,6 @@ public class comlib {
 			port.write(new byte[] {(byte) (val & 0xff)}, timeout);
 		} catch (IOException e) {
 			Log.e("ERROR","Failed to send data. check connections");
-			connected = false;
 		}
 
 		SystemClock.sleep(10);        // may not be required
@@ -295,7 +295,6 @@ public class comlib {
 			Log.e("WRITE INT", String.valueOf(val));
 		} catch (IOException e) {
 			Log.e("INT FAILURE","Failed to send data. check connections");
-			connected = false;
 			throw new IOException("DEVICE NOT CONNECTED");
 		}
 

@@ -17,6 +17,7 @@ public class spectrumData extends ViewModel {
     private final MutableLiveData<List<Integer>> adcSingle = new MutableLiveData<List<Integer>>();
     private final MutableLiveData<List<Float>> i2cActive = new MutableLiveData<List<Float>>();
     private final MutableLiveData<String> currentSensor = new MutableLiveData<String>();
+    private final MutableLiveData<String> command = new MutableLiveData<String>();
 
     public void setCount(Integer cnt) {   count.postValue(cnt); }
     public LiveData<Integer> getCount() {
@@ -46,6 +47,9 @@ public class spectrumData extends ViewModel {
 
     public void setSensor(String info) {   currentSensor.postValue(info); }
     public LiveData<String> getSensor() {return currentSensor; }
+
+    public void setCommand(String info) {   command.postValue(info); }
+    public LiveData<String> getCommand() {return command; }
 
 
 }
