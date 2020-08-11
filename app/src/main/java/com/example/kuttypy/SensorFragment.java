@@ -66,9 +66,9 @@ public class SensorFragment extends Fragment {
             data.setSensor(dev);
             Toast.makeText(requireActivity(),"Device found: "+dev,Toast.LENGTH_SHORT).show();
             if(dev.equals("MPU6050")){
-                adapter = new NumberedAdapter(6, new int[]{-32767, -32767, -32767, -32767, -32767, -32767}, new int[]{32767, 32767, 32767, 32767, 32767, 32767});
+                adapter = new NumberedAdapter(getActivity(),6, new int[]{-32767, -32767, -32767, -32767, -32767, -32767}, new int[]{32767, 32767, 32767, 32767, 32767, 32767});
             }else if(dev.equals("BMP280")){
-                adapter = new NumberedAdapter(3, new int[]{0, 0, 0}, new int[]{100, 1600, 100});
+                adapter = new NumberedAdapter(getActivity(),3, new int[]{0, 0, 0}, new int[]{100, 1600, 100});
             }
         }
 
@@ -99,6 +99,14 @@ public class SensorFragment extends Fragment {
                                 adapter.myGauges[i].setLowerText(l.get(i).toString());
                             }
                         }
+
+                if (adapter.popup.gauge != null){
+                    if (adapter.popup.position <l.size()){
+                        adapter.popup.setValue((Float) l.get(adapter.popup.position),smooth.isChecked());
+                    }
+                }
+
+
             }
         });
 

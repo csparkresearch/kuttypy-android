@@ -2,24 +2,51 @@ package com.example.kuttypy;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
-class MPU6050{
+class Constants {
+    static final byte MPU6050_ADDRESS = 0x68;
+    static final byte BMP280_ADDRESS = 118 ;
+}
+
+interface sensorMethods{
+    List getData();
+}
+
+
+class GenericSensor{
     public byte address = 0x68;
+    private sensorMethods sens;
+    GenericSensor(comlib communicationHandler, byte addr){
+        address = addr;
+        if(address == Constants.MPU6050_ADDRESS){ // assume MPU6050
+            sens = new MPU6050(communicationHandler,Constants.MPU6050_ADDRESS);
+        }else if(address == Constants.BMP280_ADDRESS){
+            sens = new BMP280(communicationHandler,Constants.BMP280_ADDRESS);
+        }
+    }
+
+    List getData(){
+        return sens.getData();
+    }
+}
+class MPU6050 implements sensorMethods{
+    private byte address;
     private comlib comms ;
     public String name = "MPU6050";
 
-    public MPU6050(comlib communicationHandler){
+    MPU6050(comlib communicationHandler, byte addr){
+            address = addr;
             comms = communicationHandler;
             comms.writeI2C(address, new byte[]{0x1B, 0x00}); //gyro range.
             comms.writeI2C(address, new byte[]{0x1C, 0x00}); // accel range.
             comms.writeI2C(address, new byte[]{0x6B, 0x00}); // Initialize. power on.
     }
 
+    @Override
     public List getData(){
         List raw = comms.readI2C(address, (byte) (0x3B), 14);
-        Integer[] arr = (Integer[])raw.toArray(new Integer[raw.size()]);
+        Integer[] arr = (Integer[])raw.toArray(new Integer[0]);
         if(raw.size() == 15 ){
             raw.clear();
             final int[] processed = {( arr[0] << 8) | arr[1],(arr[2] << 8) | arr[3],(arr[4] << 8) | arr[5],
@@ -37,26 +64,27 @@ class MPU6050{
 
 
 
-class BMP280{
-    public byte address = 118;
+class BMP280 implements  sensorMethods{
+    private byte address;
     public byte BMP280_REG_CONTROL = (byte) 0xF4;
     public byte BMP280_REG_RESULT = (byte) 0xF6;
     public byte BMP280_oversampling = 0;
-    public float _BMP280_PRESSURE_MIN_HPA = 0;
-    public float _BMP280_PRESSURE_MAX_HPA = 1600;
+    private float _BMP280_PRESSURE_MIN_HPA = 0;
+    private float _BMP280_PRESSURE_MAX_HPA = 1600;
     public float _BMP280_sea_level_pressure = (float) 1013.25; //for calibration.. from circuitpython library
 
 
     private comlib comms ;
     public String name = "BMP280";
-    double tfine = 0;
+    private double tfine = 0;
     private float[] tcal = {27504,26435,-1000}, pcal = {36477,-10645,3024,2855,140,-7,15500,-14600,6000};
-    public BMP280(comlib communicationHandler){
+    BMP280(comlib communicationHandler, byte addr){
+        address = addr;
         comms = communicationHandler;
         comms.writeI2C(address, new byte[]{(byte) 0xF4, (byte) 0xFF}); // Initialize. power on.
         List raw = comms.readI2C(address, (byte) (0x88), 24); //calibration data
         Log.e("CALIBRATION", String.valueOf(raw.size()));
-        Integer[] arr = (Integer[])raw.toArray(new Integer[raw.size()]);
+        Integer[] arr = (Integer[])raw.toArray(new Integer[0]);
 
     }
 
@@ -90,9 +118,10 @@ class BMP280{
         return (float) pressure;
     }
 
+    @Override
     public List getData(){
         List raw = comms.readI2C(address, (byte) (0xF7), 6);
-        Integer[] arr = (Integer[])raw.toArray(new Integer[raw.size()]);
+        Integer[] arr = (Integer[])raw.toArray(new Integer[0]);
 
         if(raw.size() == 7 ){
             raw.clear();
@@ -119,14 +148,3 @@ class BMP280{
 
 
 
-
-
-
-
-public class sensors {
-    public List<Object> availableSensors = new ArrayList<Object>();
-    public sensors(comlib comms){
-        availableSensors.add( new MPU6050(comms) );
-    }
-
-}

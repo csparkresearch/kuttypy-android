@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     List<List<Integer>> writeThese = new ArrayList<List<Integer>>(20);
     private MPU6050 mpu6050;
     private BMP280 bmp280;
+    private GenericSensor mySensor;
     public String dev = new String("IO");
     private boolean initSensor=false;
     private String command = new String("");
@@ -322,15 +323,22 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             while (true) {
-                if ((!running) || disableLoop || MCA.connected == false || (MCA.commandStatus != MCA.SUCCESS)) {
-                    model.setCount(0);
+                if ((!running) || disableLoop || MCA.connected == false) {
+                    if(MCA.commandStatus != MCA.SUCCESS){
+                        try {
+                            MCA.port.purgeHwBuffers(true,true);
+                            MCA.commandStatus = MCA.SUCCESS;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     continue;
                 }
                 if(initSensor){
                     if(dev.equals("MPU6050")) {
-                        mpu6050 = new MPU6050(MCA);
+                        mySensor = new GenericSensor(MCA, (byte) 0x68);
                     }else if(dev.equals("BMP280")) {
-                        bmp280 = new BMP280(MCA);
+                        mySensor = new GenericSensor(MCA, (byte) 118);
                     }
                     initSensor=false;
                 }
@@ -370,15 +378,13 @@ public class MainActivity extends AppCompatActivity {
                         arr.add(MCA.readADC(i));
                         model.setSingleADC(arr);
                     }
-                }else if(dev.equals("MPU6050")){ //navController.getCurrentDestination().getId() == R.id.nav_mpu6050){ //Sensors page
-                        model.setI2C(mpu6050.getData());
-                }else if(dev.equals("BMP280")){ //navController.getCurrentDestination().getId() == R.id.nav_bmp280){ //Sensors page
-                    model.setI2C(bmp280.getData());
+                }else if(dev.equals("MPU6050") || dev.equals("BMP280")){ //navController.getCurrentDestination().getId() == R.id.nav_mpu6050){ //Sensors page
+                        model.setI2C(mySensor.getData());
                 }
 
                 if (MCA.connected == false || (MCA.commandStatus != MCA.SUCCESS)) {
                     Message msg = new Message() ;
-                    msg.obj = "Device disconnected.  Check connections and reconnect";
+                    msg.obj = "dropped: "+MCA.connected;
                     messageHandler.sendMessage(msg);
                     continue;
                 }
