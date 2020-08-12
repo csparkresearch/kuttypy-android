@@ -17,6 +17,11 @@
             android:title="@string/menu_adc" />
 
         <item
+            android:id="@+id/nav_adcSens"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_adc" />
+
+        <item
             android:id="@+id/nav_mpu6050"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_mpu6050" />

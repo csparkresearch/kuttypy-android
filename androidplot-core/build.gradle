@@ -99,6 +99,7 @@ dependencies {
     // temp fix for:
     // https://github.com/robolectric/robolectric/issues/1932
     testImplementation 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
+    implementation 'androidx.annotation:annotation:1.1.0'
 }
 
 task javadoc(type: Javadoc) {

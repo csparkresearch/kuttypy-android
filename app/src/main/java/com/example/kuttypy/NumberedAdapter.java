@@ -24,7 +24,17 @@ public class NumberedAdapter extends RecyclerView.Adapter<NumberedAdapter.ViewHo
     SensorPopup popup;
     private Context context;
 
+    void setValue(float value,int pos,boolean smooth){
+        if(pos>=totalgauges)return;
+        if(myGauges[pos] == null)return;
+        if(smooth){
+            myGauges[pos].setLowerText(""+value);
+        }else{
+            myGauges[pos].setValue(value);
+        }
+        myGauges[pos].setLowerText(""+value);
 
+    }
     NumberedAdapter(Context c, int count, int[] min, int[] max) {
         context = c;
         totalgauges = count;

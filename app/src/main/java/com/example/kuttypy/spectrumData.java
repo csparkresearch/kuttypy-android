@@ -42,7 +42,7 @@ public class spectrumData extends ViewModel {
     public LiveData<List<Integer>> getSingleADC() {return adcSingle; }
 
     public void setI2C(List info) {   i2cActive.postValue(info); }
-    public LiveData<List<Float>> scanI2C() {return i2cActive; }
+    public LiveData<List<Float>> getI2C() {return i2cActive; }
 
 
     public void setSensor(String info) {   currentSensor.postValue(info); }

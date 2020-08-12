@@ -2,11 +2,13 @@ package com.example.kuttypy;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class Constants {
     static final byte MPU6050_ADDRESS = 0x68;
     static final byte BMP280_ADDRESS = 118 ;
+    static final byte ADC_ADDRESS = (byte) 128;// special. I2C is only upto 127
 }
 
 interface sensorMethods{
@@ -23,6 +25,8 @@ class GenericSensor{
             sens = new MPU6050(communicationHandler,Constants.MPU6050_ADDRESS);
         }else if(address == Constants.BMP280_ADDRESS){
             sens = new BMP280(communicationHandler,Constants.BMP280_ADDRESS);
+        }else if(address == Constants.ADC_ADDRESS){
+            sens = new ADC(communicationHandler);
         }
     }
 
@@ -61,6 +65,27 @@ class MPU6050 implements sensorMethods{
     }
 
 }
+
+class ADC implements sensorMethods{
+    private comlib comms ;
+    public String name = "10 bit ADC";
+
+    ADC(comlib communicationHandler){
+        comms = communicationHandler;
+    }
+
+    @Override
+    public List getData(){
+        List<Float> arr = new ArrayList<>(8);
+        for(int i=0;i<8;i++){
+            arr.add((float)comms.readADC(i));
+        }
+
+    return  arr;
+    }
+
+}
+
 
 
 

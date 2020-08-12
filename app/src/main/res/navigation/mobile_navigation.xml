@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_io_to_nav_BMP280"
             app:destination="@id/nav_bmp280" />
+        <action
+            android:id="@+id/action_nav_io_to_nav_adcSens"
+            app:destination="@id/nav_adcSens" />
     </fragment>
 
     <fragment
@@ -54,6 +57,18 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_adcSens"
+        android:name="com.example.kuttypy.SensorFragment"
+        android:label="@string/menu_adc"
+        tools:layout="@layout/fragment_sensor" >
+
+        <argument
+            android:name="device"
+            app:argType="string"
+            android:defaultValue="ADCSENS"/>
+
+    </fragment>
 
 
     `

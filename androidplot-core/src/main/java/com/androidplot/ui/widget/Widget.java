@@ -16,14 +16,26 @@
 
 package com.androidplot.ui.widget;
 
-import android.graphics.*;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.RectF;
 
-import com.androidplot.ui.*;
-import com.androidplot.util.DisplayDimensions;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.androidplot.ui.Anchor;
+import com.androidplot.ui.BoxModel;
+import com.androidplot.ui.BoxModelable;
 import com.androidplot.ui.HorizontalPositioning;
+import com.androidplot.ui.LayoutManager;
+import com.androidplot.ui.PositionMetrics;
+import com.androidplot.ui.Resizable;
+import com.androidplot.ui.Size;
+import com.androidplot.ui.SizeMetric;
+import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
+import com.androidplot.util.DisplayDimensions;
 import com.androidplot.util.PixelUtils;
 
 /**

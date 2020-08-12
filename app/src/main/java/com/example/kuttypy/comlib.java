@@ -119,10 +119,13 @@ public class comlib {
 
 		String version;
 		try {
-			sendByte(READB);
-			sendByte(reg);
-			//SystemClock.sleep(1);
-			port.read(buffer,2);
+			port.write(new byte[] { (byte)(READB&0xFF), (byte) (reg&0xFF)}, 100);
+			SystemClock.sleep(2);
+			int bt = port.read(buffer, 100);
+			if(bt==0){
+				SystemClock.sleep(2);
+				port.read(buffer, 1);
+			}
 			commandStatus = SUCCESS;
 			return buffer[0]&0xFF;
 		} catch (IOException e) {
@@ -155,14 +158,14 @@ public class comlib {
 		int low=0,high=0,val=0;
 		if (systemBusy()) return 0;
 		try {
-			port.write(new byte[] { (byte)(WRITEB&0xFF), (byte) (0x27),(byte) (64| (chan&0xF))}, 2); //ADCMUX, 64|chan
-			port.write(new byte[] { (byte)(WRITEB&0xFF), (byte) (0x26),(byte) (197)}, 2); //ADCSRA,197
+			port.write(new byte[] { (byte)(WRITEB&0xFF), (byte) (0x27),(byte) (64| (chan&0xF))}, 100); //ADCMUX, 64|chan
+			port.write(new byte[] { (byte)(WRITEB&0xFF), (byte) (0x26),(byte) (197)}, 100); //ADCSRA,197
 			SystemClock.sleep(1);
 			commandStatus = SUCCESS;
 			low = readReg(0x24);
 			high = readReg(0x25);
             val = (high<<8)|low;
-            if(val>1023)port.read(buffer,1); // error checking for extra byte
+            if(val>1023)port.read(buffer,10); // error checking for extra byte
 			return val;
 		} catch (IOException e) {
 			Log.e(TAG,"communication error");
@@ -184,11 +187,11 @@ public class comlib {
 		if (systemBusy()) return arr;
 		try {
 			sendByte(SCANI2C);
-			got = port.read(buffer,10);
+			got = port.read(buffer,100);
 			for(int i=0;i<got;i++){
 				if( (buffer[i]&0xFF) <254)arr.add((int) buffer[i]&0xFF);
 			}
-			got = port.read(buffer,10);
+			got = port.read(buffer,100);
 			for(int i=0;i<got;i++){
 				if((buffer[i]&0xFF) < 254)arr.add((int) buffer[i]&0xFF);
 			}
@@ -217,11 +220,10 @@ public class comlib {
 		int got=0,bt = 0,timeouts=0;
 		if (systemBusy()) return arr;
 		try {
-			port.write(new byte[] { (byte)(READI2C&0xFF),addr,reg, (byte) numbytes}, 5);
-			SystemClock.sleep(5);
+			port.write(new byte[] { (byte)(READI2C&0xFF),addr,reg, (byte) numbytes}, 100);
+			SystemClock.sleep(1);
 			do{
-				bt = port.read(buffer,1);
-
+				bt = port.read(buffer,100);
 				if (bt==0)timeouts++;
 				if(timeouts>5)break;
 				for(int i=0;i<bt;i++,got++)arr.add((int) buffer[i]&0xFF);
@@ -239,7 +241,7 @@ public class comlib {
 	public boolean writeI2C(byte addr,byte[] data){
 		if (systemBusy()) return false;
 		try {
-			port.write(new byte[] { (byte)(WRITEI2C&0xFF),addr,(byte) data.length}, 5);
+			port.write(new byte[] { (byte)(WRITEI2C&0xFF),addr,(byte) data.length}, 50);
 			port.write(data, 5);
 			int bt = port.read(buffer, 10);
 			commandStatus = SUCCESS;

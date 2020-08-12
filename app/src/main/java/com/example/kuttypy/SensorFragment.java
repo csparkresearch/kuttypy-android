@@ -19,14 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import de.nitri.gauge.Gauge;
-
 public class SensorFragment extends Fragment {
     private spectrumData data;
     private LinearLayout sensorLayout;
     private Button scan;
-    private View customA;
-    private Gauge[] gauges = new Gauge[10];
     NumberedAdapter adapter;
     private CheckBox smooth;
     public String dev;
@@ -63,19 +59,22 @@ public class SensorFragment extends Fragment {
         if(getArguments() != null) {
 
             dev = SensorFragmentArgs.fromBundle(getArguments()).getDevice();
-            data.setSensor(dev);
             Toast.makeText(requireActivity(),"Device found: "+dev,Toast.LENGTH_SHORT).show();
             if(dev.equals("MPU6050")){
                 adapter = new NumberedAdapter(getActivity(),6, new int[]{-32767, -32767, -32767, -32767, -32767, -32767}, new int[]{32767, 32767, 32767, 32767, 32767, 32767});
             }else if(dev.equals("BMP280")){
                 adapter = new NumberedAdapter(getActivity(),3, new int[]{0, 0, 0}, new int[]{100, 1600, 100});
+            }else if(dev.equals("ADCSENS")){
+                adapter = new NumberedAdapter(getActivity(),8, new int[]{0, 0, 0, 0, 0, 0, 0, 0}, new int[]{1023, 1023, 1023,1023, 1023, 1023,1023, 1023});
             }
+            data.setSensor(dev);
         }
 
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
         return root;
 
     }
@@ -86,22 +85,17 @@ public class SensorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        data.scanI2C().observe(getViewLifecycleOwner(), new Observer<List<Float>>() {
+        data.getI2C().observe(getViewLifecycleOwner(), new Observer<List<Float>>() {
             @Override
             public void onChanged(@Nullable List l) {
                 //scan.setText(String.valueOf(l));
-                        for(int i=0;i<l.size();i++) {
-                            if(smooth.isChecked()){
-                                adapter.myGauges[i].moveToValue((float) l.get(i));
-                                adapter.myGauges[i].setLowerText(l.get(i).toString());
-                            }else{
-                                adapter.myGauges[i].setValue((float) l.get(i));
-                                adapter.myGauges[i].setLowerText(l.get(i).toString());
-                            }
-                        }
+                for(int i=0;i<l.size();i++) {
+                    adapter.setValue((Float) l.get(i),i,smooth.isChecked());
+                }
 
                 if (adapter.popup.gauge != null){
                     if (adapter.popup.position <l.size()){
+
                         adapter.popup.setValue((Float) l.get(adapter.popup.position),smooth.isChecked());
                     }
                 }
