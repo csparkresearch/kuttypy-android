@@ -1,4 +1,4 @@
-package com.example.kuttypy;
+package com.cspark.kuttypy;
 
 import org.junit.Test;
 

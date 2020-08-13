@@ -1,4 +1,4 @@
-package com.example.kuttypy.ui.gallery;
+package com.cspark.kuttypy.ui.gallery;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

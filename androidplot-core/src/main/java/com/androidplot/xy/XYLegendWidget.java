@@ -16,8 +16,10 @@
 
 package com.androidplot.xy;
 
-import android.graphics.*;
-import android.support.annotation.NonNull;
+import android.graphics.Canvas;
+import android.graphics.RectF;
+
+import androidx.annotation.NonNull;
 
 import com.androidplot.ui.LayoutManager;
 import com.androidplot.ui.SeriesBundle;

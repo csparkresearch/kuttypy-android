@@ -8,7 +8,7 @@
    any later version.
 */
 
-package com.example.kuttypy;
+package com.cspark.kuttypy;
 
 import android.os.SystemClock;
 import android.util.Log;

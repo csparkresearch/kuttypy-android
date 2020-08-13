@@ -1,4 +1,4 @@
-package com.example.kuttypy.ui.gallery;
+package com.cspark.kuttypy.ui.gallery;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,9 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.kuttypy.MainActivity;
-import com.example.kuttypy.R;
-import com.example.kuttypy.spectrumData;
+import com.cspark.kuttypy.MainActivity;
+import com.cspark.kuttypy.R;
+import com.cspark.kuttypy.spectrumData;
 
 import java.util.ArrayList;
 import java.util.List;

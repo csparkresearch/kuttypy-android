@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
+
 import com.androidplot.ui.LayoutManager;
 import com.androidplot.ui.Size;
 import com.androidplot.ui.TableModel;

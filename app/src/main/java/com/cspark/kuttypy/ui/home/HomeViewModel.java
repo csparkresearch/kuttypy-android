@@ -1,4 +1,4 @@
-package com.example.kuttypy.ui.home;
+package com.cspark.kuttypy.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
