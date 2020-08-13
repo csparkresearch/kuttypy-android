@@ -49,6 +49,23 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <com.androidplot.xy.XYPlot
+                    android:id="@+id/plotAll"
+                    style="@style/APDefacto.Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    ap:drawGridOnTop="true"
+                    ap:renderMode="use_background_thread" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

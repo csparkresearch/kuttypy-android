@@ -166,7 +166,7 @@ public class Gauge extends View {
         rimCirclePaint.setAntiAlias(true);
         rimCirclePaint.setStyle(Paint.Style.STROKE);
         rimCirclePaint.setColor(Color.argb(0x4f, 0x33, 0x36, 0x33));
-        rimCirclePaint.setStrokeWidth(0.005f);
+        rimCirclePaint.setStrokeWidth(0.05f);
 
         facePaint = new Paint();
         facePaint.setAntiAlias(true);
@@ -640,7 +640,10 @@ public class Gauge extends View {
         validate();
         invalidate();
     }
-
+    public void setColors(int c){
+        rimCirclePaint.setColor(c);
+        needlePaint.setColor(c);
+    }
     private void validate() {
         boolean valid = true;
         if (totalNicks % majorNickInterval != 0) {

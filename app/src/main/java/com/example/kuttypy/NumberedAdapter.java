@@ -17,9 +17,9 @@ import java.util.List;
 import de.nitri.gauge.Gauge;
 
 public class NumberedAdapter extends RecyclerView.Adapter<NumberedAdapter.ViewHolder> {
-    private final int[] minVal, maxVal;
+    public final int[] minVal, maxVal;
     private List<String> labels;
-    private int totalgauges;
+    public int totalgauges;
     Gauge[] myGauges;
     SensorPopup popup;
     private Context context;
@@ -28,13 +28,14 @@ public class NumberedAdapter extends RecyclerView.Adapter<NumberedAdapter.ViewHo
         if(pos>=totalgauges)return;
         if(myGauges[pos] == null)return;
         if(smooth){
-            myGauges[pos].setLowerText(""+value);
+            myGauges[pos].moveToValue(value);
         }else{
             myGauges[pos].setValue(value);
         }
         myGauges[pos].setLowerText(""+value);
 
     }
+
     NumberedAdapter(Context c, int count, int[] min, int[] max) {
         context = c;
         totalgauges = count;
@@ -64,6 +65,7 @@ public class NumberedAdapter extends RecyclerView.Adapter<NumberedAdapter.ViewHo
         holder.gauge.setMajorNickInterval(10);
         holder.gauge.setUpperTextSize(100);
         holder.gauge.setLowerTextSize(48);
+        holder.gauge.setColors(Constants.colors[position]);
 
 
         //handling item click event
@@ -81,8 +83,8 @@ public class NumberedAdapter extends RecyclerView.Adapter<NumberedAdapter.ViewHo
                 }
                 ft.addToBackStack(null);
                 */
-                popup.position = position;
                 popup.show(ft, "dialog");
+                popup.setPosition( position);
 
             }
         });

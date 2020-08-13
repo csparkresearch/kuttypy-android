@@ -1,5 +1,6 @@
 package com.example.kuttypy;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -9,6 +10,19 @@ class Constants {
     static final byte MPU6050_ADDRESS = 0x68;
     static final byte BMP280_ADDRESS = 118 ;
     static final byte ADC_ADDRESS = (byte) 128;// special. I2C is only upto 127
+
+    static final int[] colors = new int[]{
+            Color.rgb(255, 0, 0),
+            Color.rgb(  0, 255, 0),
+            Color.rgb(0, 0, 255),
+            Color.rgb(255, 255, 0),
+            Color.rgb(0, 255, 255),
+            Color.rgb(255, 0, 255),
+            Color.rgb(255, 255, 255),
+            Color.rgb(100, 255, 100),
+            Color.rgb(100, 100, 255)
+    };
+
 }
 
 interface sensorMethods{

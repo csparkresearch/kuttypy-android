@@ -202,9 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 String mString=(String)msg.obj;
                 Toast.makeText(getBaseContext(), mString, Toast.LENGTH_LONG).show();
             }
-            
-        };
 
+        };
         HandlerThread thread = new HandlerThread("MyHandlerThread", Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
         thread.start();
@@ -218,9 +217,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void askForPermission(){
         // Find all available drivers from attached devices.
+        disableLoop = true;
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
+
 
         List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(mUsbManager);
         if (availableDrivers.isEmpty()) {
@@ -245,7 +246,9 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_reconnect:
+                MCA.close();
                 askForPermission();
+
                 return true;
             case R.id.action_credits:
                 about_dialog.show();
@@ -269,26 +272,30 @@ public class MainActivity extends AppCompatActivity {
                 synchronized (this) {
                     if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false) ) { //permission granted
                         try {
+                            MCA.close();
                             port = driver.getPorts().get(0); // Most devices have just one port (port 0)
                             port.open(connection);
-                            port.setParameters(500000, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-                            connected = true;
+                            port.setParameters(38400, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
                             port.purgeHwBuffers(true,true);
+                            Log.d("Reconnecting", "Purged buffers " + port);
                             Toast.makeText(getBaseContext(),"device connected. .",Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-
                         if(mDevice != null){
+
                                 MCA.setPort(port);
-                                if(MCA.connected)Toast.makeText(getBaseContext(),"Device found: "+MCA.version,Toast.LENGTH_SHORT).show();
+                                if(MCA.connected){
+                                    Toast.makeText(getBaseContext(),"Reconnected to:: "+MCA.version,Toast.LENGTH_SHORT).show();
+                                    disableLoop = false;
+                                }
                              else Toast.makeText(getBaseContext(),"Device not found!!",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {																		//permission denied
                         Toast.makeText(getBaseContext(),"Please grant permissions to access the device",Toast.LENGTH_LONG).show();
-                        //Log.d("UH-OH", "permission denied for device " + mcp2200.mDevice);
+                        Log.d("UH-OH", "permission denied for device " + mDevice);
                     }
                 }
             }
@@ -380,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (MCA.connected == false || (MCA.commandStatus != MCA.SUCCESS)) {
                     Message msg = new Message() ;
-                    msg.obj = "dropped: "+MCA.connected;
+                    msg.obj = "dropped a packet: "+MCA.connected;
                     messageHandler.sendMessage(msg);
                     continue;
                 }

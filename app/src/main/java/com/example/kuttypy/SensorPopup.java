@@ -23,7 +23,7 @@ public class SensorPopup extends DialogFragment {
 
     private final int minVal,maxVal;
     private boolean isModal = false;
-    int position;
+    int position=0;
     Gauge gauge;
 
     public XYPlot plot;
@@ -77,7 +77,9 @@ public class SensorPopup extends DialogFragment {
         setupUI(view);
         return dialog;
     }
-
+    public void setPosition(int pos){
+        position = pos;
+    }
     private void setupUI(View view){
         gauge = (Gauge) view.findViewById(R.id.gaugePopup);
         gauge.setMaxValue(maxVal);
@@ -87,14 +89,15 @@ public class SensorPopup extends DialogFragment {
         gauge.setMajorNickInterval(10);
         gauge.setUpperTextSize(100);
         gauge.setLowerTextSize(48);
-
+        gauge.setColors(Constants.colors[position]);
 
         plot = (XYPlot) view.findViewById(R.id.plot);
         SIZE = 500;
         myData = new DataSet(SIZE);
 
         // add a new series' to the xyplot:
-        MyFadeFormatter formatter =new MyFadeFormatter(SIZE);
+        MyFadeFormatter formatter =new MyFadeFormatter((int) (SIZE));
+        formatter.getLinePaint().setColor(Constants.colors[position]);
         formatter.setLegendIconEnabled(false);
         plot.addSeries(myData, formatter);
         plot.setRangeBoundaries(minVal, maxVal, BoundaryMode.FIXED);
@@ -166,7 +169,7 @@ public class SensorPopup extends DialogFragment {
     public static class DataSet implements XYSeries {
 
         private final Number[] data;
-        private int latestIndex;
+        public int latestIndex;
         /**
          *
          * @param size Sample size contained within this model

@@ -131,6 +131,7 @@ public class comlib {
 		} catch (IOException e) {
 			Log.e(TAG,"communication error");
 			e.printStackTrace();
+			connected = false;
 			commandStatus = COMERR;
 			return 0;
 		}
@@ -210,6 +211,7 @@ public class comlib {
 			Log.e(TAG,"communication error");
 			e.printStackTrace();
 			commandStatus = COMERR;
+			connected = false;
 		}
 		return arr;
 	}
@@ -233,6 +235,7 @@ public class comlib {
 			Log.e(TAG,"communication error");
 			e.printStackTrace();
 			commandStatus = COMERR;
+			connected = false;
 		}
 		return arr;
 	}
@@ -251,6 +254,7 @@ public class comlib {
 			Log.e(TAG,"communication error");
 			e.printStackTrace();
 			commandStatus = COMERR;
+			connected = false;
 		}
 		return true;
 	}
@@ -259,8 +263,9 @@ public class comlib {
 
 	public boolean close(){
 		 try{
-			 port.close();
 			 connected=false;
+			 port.close();
+			 commandStatus = SUCCESS;
 			 return true;
 		 }catch (IOException e){
 			 Log.d(TAG,"Closed device!!");
