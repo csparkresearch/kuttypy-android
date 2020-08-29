@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +38,7 @@ public class SensorFragment extends Fragment {
     private SensorPopup.DataSet[] myData =  new SensorPopup.DataSet[20];
     private int SIZE=500;
     private AdvancedLineAndPointRenderer rendererRef;
+    private TextView title;
 
 
     public SensorFragment() {
@@ -57,29 +58,23 @@ public class SensorFragment extends Fragment {
                              Bundle savedInstanceState) {
         ConstraintLayout root = (ConstraintLayout)inflater.inflate(R.layout.fragment_sensor, container, false);
 
-        scan = (Button) root.findViewById(R.id.scanButton);
         smooth = (CheckBox) root.findViewById(R.id.smoothBox);
+        title = (TextView) root.findViewById(R.id.sensorTitle);
         data = new ViewModelProvider(requireActivity()).get(spectrumData.class);
-
-        scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                data.setCommand("scan");
-            }
-        });
-
 
         if(getArguments() != null) {
 
             dev = SensorFragmentArgs.fromBundle(getArguments()).getDevice();
-            Toast.makeText(requireActivity(),"Device found: "+dev,Toast.LENGTH_SHORT).show();
             if(dev.equals("MPU6050")){
                 adapter = new NumberedAdapter(getActivity(),6, new int[]{-32767, -32767, -32767, -32767, -32767, -32767}, new int[]{32767, 32767, 32767, 32767, 32767, 32767});
             }else if(dev.equals("BMP280")){
                 adapter = new NumberedAdapter(getActivity(),3, new int[]{0, 0, 0}, new int[]{100, 1600, 100});
+            }else if(dev.equals("TSL2561")){
+                adapter = new NumberedAdapter(getActivity(),2, new int[]{0, 0}, new int[]{40000,40000});
             }else if(dev.equals("ADCSENS")){
                 adapter = new NumberedAdapter(getActivity(),8, new int[]{0, 0, 0, 0, 0, 0, 0, 0}, new int[]{1023, 1023, 1023,1023, 1023, 1023,1023, 1023});
             }
+            title.setText("Sensor : "+dev);
             data.setSensor(dev);
         }
 

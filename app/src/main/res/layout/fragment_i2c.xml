@@ -13,55 +13,39 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/sensorLayout"
+            android:id="@+id/i2cLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/sensorTitle"
+            <Button
+                android:id="@+id/searchButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Detected Sensor Data" />
-
-
-            <CheckBox
-                android:id="@+id/smoothBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Smooth" />
+                android:text="Scan" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:id="@+id/gauge2Layout">
+                android:id="@+id/detectedLayout">
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/sensLayout">
 
                 <com.cspark.kuttypy.AutoFitRecyclerView
-                    android:id="@+id/recycler_view"
+                    android:id="@+id/sens_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:columnWidth="@dimen/column_width"
                     android:padding="@dimen/activity_horizontal_margin" />
 
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <com.androidplot.xy.XYPlot
-                    android:id="@+id/plotAll"
-                    style="@style/APDefacto.Dark"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    ap:drawGridOnTop="true"
-                    ap:renderMode="use_background_thread" />
 
 
             </LinearLayout>

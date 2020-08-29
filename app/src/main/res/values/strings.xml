@@ -20,4 +20,6 @@
     <string name="menu_i2c">I2C Sensors</string>
     <string name="menu_mpu6050">I2C MPU6050</string>
     <string name="menu_bmp280">BMP280 Pressure Sensor</string>
+    <string name="menu_tsl2561">TSL2561 Light Sensor</string>
+    <string name="menu_sensors">I2C Sensors</string>
 </resources>

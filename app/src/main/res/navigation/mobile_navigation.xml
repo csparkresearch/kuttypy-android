@@ -14,14 +14,12 @@
             android:id="@+id/action_nav_spectrum_to_nav_controls2"
             app:destination="@id/nav_adc" />
         <action
-            android:id="@+id/action_nav_io_to_nav_mpu60502"
-            app:destination="@id/nav_mpu6050" />
-        <action
-            android:id="@+id/action_nav_io_to_nav_BMP280"
-            app:destination="@id/nav_bmp280" />
-        <action
             android:id="@+id/action_nav_io_to_nav_adcSens"
             app:destination="@id/nav_adcSens" />
+
+        <action
+            android:id="@+id/action_nav_io_to_nav_sensors"
+            app:destination="@id/nav_sensors" />
     </fragment>
 
     <fragment
@@ -29,33 +27,6 @@
         android:name="com.cspark.kuttypy.ui.home.HomeFragment"
         android:label="@string/menu_adc"
         tools:layout="@layout/fragment_home"></fragment>
-
-
-    <fragment
-        android:id="@+id/nav_mpu6050"
-        android:name="com.cspark.kuttypy.SensorFragment"
-        android:label="@string/menu_mpu6050"
-        tools:layout="@layout/fragment_sensor" >
-
-        <argument
-            android:name="device"
-            app:argType="string"
-            android:defaultValue="MPU6050"/>
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_bmp280"
-        android:name="com.cspark.kuttypy.SensorFragment"
-        android:label="@string/menu_bmp280"
-        tools:layout="@layout/fragment_sensor" >
-
-        <argument
-            android:name="device"
-            app:argType="string"
-            android:defaultValue="BMP280"/>
-
-    </fragment>
 
     <fragment
         android:id="@+id/nav_adcSens"
@@ -69,6 +40,17 @@
             android:defaultValue="ADCSENS"/>
 
     </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_sensors"
+        android:name="com.cspark.kuttypy.I2CFragment"
+        android:label="@string/menu_sensors"
+        tools:layout="@layout/fragment_sensor" >
+
+    </fragment>
+
+
 
 
     `

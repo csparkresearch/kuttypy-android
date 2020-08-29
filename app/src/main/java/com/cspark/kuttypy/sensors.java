@@ -4,12 +4,21 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class Constants {
     static final byte MPU6050_ADDRESS = 0x68;
     static final byte BMP280_ADDRESS = 118 ;
+    static final byte TSL2561_ADDRESS = 0x39 ;
     static final byte ADC_ADDRESS = (byte) 128;// special. I2C is only upto 127
+
+    static final Map<Byte, String> addressMap = new HashMap<Byte, String>() {{
+        put(MPU6050_ADDRESS, "MPU6050");
+        put(BMP280_ADDRESS, "BMP280");
+        put(TSL2561_ADDRESS, "TSL2561");
+    }};
 
     static final int[] colors = new int[]{
             Color.rgb(255, 0, 0),
@@ -39,6 +48,8 @@ class GenericSensor{
             sens = new MPU6050(communicationHandler,Constants.MPU6050_ADDRESS);
         }else if(address == Constants.BMP280_ADDRESS){
             sens = new BMP280(communicationHandler,Constants.BMP280_ADDRESS);
+        }else if(address == Constants.TSL2561_ADDRESS){
+            sens = new TSL2561(communicationHandler,Constants.TSL2561_ADDRESS);
         }else if(address == Constants.ADC_ADDRESS){
             sens = new ADC(communicationHandler);
         }
@@ -48,6 +59,7 @@ class GenericSensor{
         return sens.getData();
     }
 }
+
 class MPU6050 implements sensorMethods{
     private byte address;
     private comlib comms ;
@@ -80,6 +92,37 @@ class MPU6050 implements sensorMethods{
 
 }
 
+
+class TSL2561 implements sensorMethods{
+    private byte address;
+    private comlib comms ;
+    public String name = "TSL2561 Luminosity";
+
+    TSL2561(comlib communicationHandler, byte addr){
+        address = addr;
+        comms = communicationHandler;
+        comms.writeI2C(address, new byte[]{(byte) 0x80, 0x03}); //power on.
+        comms.writeI2C(address, new byte[]{((byte) 0x80 )| (0x01), 0x00}); // Timing|Gain.
+    }
+
+    @Override
+    public List getData(){
+        List raw = comms.readI2C(address, (byte) (0x80 | 0x20 | 0x0C),4);
+        Integer[] arr = (Integer[])raw.toArray(new Integer[0]);
+        if(raw.size() == 15 ){
+            raw.clear();
+            final int[] processed = {( arr[1] << 8) | arr[0],(arr[3] << 8) | arr[2]};
+            for (int i : processed) raw.add((float)(short)i);
+        }else{
+            raw.clear();
+        }
+        return raw;
+    }
+
+}
+
+
+
 class ADC implements sensorMethods{
     private comlib comms ;
     public String name = "10 bit ADC";
@@ -110,7 +153,7 @@ class BMP280 implements  sensorMethods{
     public byte BMP280_oversampling = 0;
     private float _BMP280_PRESSURE_MIN_HPA = 0;
     private float _BMP280_PRESSURE_MAX_HPA = 1600;
-    public float _BMP280_sea_level_pressure = (float) 1013.25; //for calibration.. from circuitpython library
+    public float _BMP280_sea_level_pressure = (float) 1013.25; //for calibration
 
 
     private comlib comms ;

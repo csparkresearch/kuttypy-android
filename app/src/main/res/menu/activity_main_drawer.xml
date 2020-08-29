@@ -11,6 +11,7 @@
             android:id="@+id/nav_io"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_io" />
+
         <item
             android:id="@+id/nav_adc"
             android:icon="@drawable/ic_menu_camera"
@@ -21,15 +22,13 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_adc" />
 
-        <item
-            android:id="@+id/nav_mpu6050"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_mpu6050" />
 
         <item
-            android:id="@+id/nav_bmp280"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_bmp280" />
+            android:id="@+id/nav_sensors"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="@string/menu_sensors" />
+
+
 
     </group>
 

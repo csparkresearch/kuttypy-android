@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_io, R.id.nav_adc,R.id.nav_mpu6050,R.id.nav_bmp280,R.id.nav_adcSens)
+                R.id.nav_io, R.id.nav_adcSens, R.id.nav_sensors)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -339,6 +339,8 @@ public class MainActivity extends AppCompatActivity {
                         mySensor = new GenericSensor(MCA, Constants.MPU6050_ADDRESS);
                     }else if(dev.equals("BMP280")) {
                         mySensor = new GenericSensor(MCA, Constants.BMP280_ADDRESS);
+                    }else if(dev.equals("TSL2561")) {
+                        mySensor = new GenericSensor(MCA, Constants.TSL2561_ADDRESS);
                     }else if(dev.equals("ADCSENS")) {
                         mySensor = new GenericSensor(MCA, Constants.ADC_ADDRESS);
                     }
@@ -358,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
                 if(command.equals("scan")){
                     Log.e("ERR","SCANNING");
                     List found = MCA.scanI2C();
+                    model.setI2Cscan(found);
                     Log.e("ERR","SCANNING"+found.toString());
                     Message msg = new Message();
                     msg.obj = " Devices at: " + found.toString();
@@ -381,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
                         arr.add(MCA.readADC(i));
                         model.setSingleADC(arr);
                     }
-                }else if(dev.equals("MPU6050") || dev.equals("BMP280") || dev.equals("ADCSENS")){ //navController.getCurrentDestination().getId() == R.id.nav_mpu6050){ //Sensors page
+                }else if(dev.equals("MPU6050") || dev.equals("BMP280") || dev.equals("TSL2561") || dev.equals("ADCSENS")){ //navController.getCurrentDestination().getId() == R.id.nav_mpu6050){ //Sensors page
                         model.setI2C(mySensor.getData());
                 }
 
